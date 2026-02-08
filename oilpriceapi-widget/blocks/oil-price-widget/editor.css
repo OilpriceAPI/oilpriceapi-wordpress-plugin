@@ -1,0 +1,11 @@
+/**
+ * OilPriceAPI Widget - Editor Styles
+ */
+
+.wp-block-oilpriceapi-widget .components-placeholder {
+  min-height: 120px;
+}
+
+.wp-block-oilpriceapi-widget .components-placeholder__instructions {
+  margin-bottom: 12px;
+}

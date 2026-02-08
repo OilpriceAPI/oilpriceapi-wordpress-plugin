@@ -1,0 +1,57 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "oilpriceapi/widget",
+  "version": "1.0.0",
+  "title": "OilPriceAPI Widget",
+  "category": "embed",
+  "icon": "chart-line",
+  "description": "Embed live oil prices, diesel prices, fuel surcharge calculator, or carbon cost calculator.",
+  "keywords": [
+    "oil",
+    "price",
+    "commodity",
+    "diesel",
+    "fuel",
+    "carbon",
+    "energy",
+    "widget"
+  ],
+  "textdomain": "oilpriceapi-widget",
+  "attributes": {
+    "widgetType": {
+      "type": "string",
+      "default": "ticker"
+    },
+    "theme": {
+      "type": "string",
+      "default": "dark"
+    },
+    "commodities": {
+      "type": "string",
+      "default": "BRENT,WTI"
+    },
+    "layout": {
+      "type": "string",
+      "default": "horizontal"
+    },
+    "regional": {
+      "type": "string",
+      "default": "true"
+    },
+    "basePrice": {
+      "type": "string",
+      "default": "2.50"
+    },
+    "carbonPrice": {
+      "type": "string",
+      "default": "50"
+    }
+  },
+  "supports": {
+    "html": false,
+    "align": ["wide", "full"]
+  },
+  "editorScript": "file:./index.js",
+  "editorStyle": "file:./editor.css"
+}

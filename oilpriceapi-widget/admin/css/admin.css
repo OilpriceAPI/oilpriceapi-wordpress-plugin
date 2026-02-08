@@ -1,0 +1,27 @@
+/**
+ * OilPriceAPI Widget Admin Styles
+ */
+
+.oilpriceapi-settings h1 {
+  margin-bottom: 20px;
+}
+
+.oilpriceapi-shortcode-ref h3 {
+  margin-top: 20px;
+  margin-bottom: 8px;
+}
+
+.oilpriceapi-shortcode-ref code {
+  display: inline-block;
+  padding: 8px 12px;
+  background: #f0f0f1;
+  border: 1px solid #dcdcde;
+  border-radius: 4px;
+  font-size: 13px;
+  margin-right: 8px;
+  vertical-align: middle;
+}
+
+.oilpriceapi-copy-btn {
+  vertical-align: middle;
+}
