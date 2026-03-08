@@ -81,12 +81,10 @@ Yes. You can place different widget types on the same page. Each widget operates
 
 == Screenshots ==
 
-1. Oil Price Ticker widget (dark theme, horizontal layout)
-2. Diesel Price Tracker widget with regional prices
-3. Fuel Surcharge Calculator widget
-4. Carbon Cost Calculator widget
-5. Gutenberg block with sidebar controls
-6. Settings page with shortcode reference
+1. Oil Price Ticker — configure theme, commodities, and layout with live preview
+2. Diesel Price Tracker — national average and 6 regional U.S. diesel prices
+3. Fuel Surcharge Calculator — real-time diesel-based surcharge calculation
+4. Carbon Cost Calculator — CO2 emissions and carbon cost from oil consumption
 
 == Changelog ==
 
@@ -97,6 +95,17 @@ Yes. You can place different widget types on the same page. Each widget operates
 * Gutenberg block with sidebar controls
 * Settings page with default configuration
 * Dark and light theme support
+
+== Also Available As ==
+
+OilPriceAPI is available across many platforms:
+
+* **Python SDK**: [pypi.org/project/oilpriceapi](https://pypi.org/project/oilpriceapi/) - Python client with Pandas integration
+* **Node.js SDK**: [npmjs.com/package/oilpriceapi](https://www.npmjs.com/package/oilpriceapi) - TypeScript/JavaScript SDK
+* **Google Sheets Add-on**: Custom functions like =OILPRICE("BRENT_CRUDE_USD")
+* **Excel Add-in**: Energy price comparison in Excel
+
+Get your free API key at [oilpriceapi.com/signup](https://www.oilpriceapi.com/signup?utm_source=wordpress&utm_medium=plugin&utm_campaign=readme).
 
 == Upgrade Notice ==
 
