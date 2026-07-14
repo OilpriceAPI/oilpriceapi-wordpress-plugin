@@ -72,7 +72,7 @@ No. The widgets are completely free and work without any API key or account. The
 
 = Where does the price data come from? =
 
-Oil and natural gas prices come from OilPriceAPI's live market data feeds. U.S. diesel retail prices come from the EIA (U.S. Energy Information Administration) and update weekly. Carbon calculations use EPA emission factors.
+Oil and natural gas prices are collected from public market sources and delivered through the OilPriceAPI API — we are the delivery route, not the origin. U.S. diesel retail prices are EIA (U.S. Energy Information Administration) series: public domain at the source, so no permission is needed from us, and none is ours to give. Carbon calculations use EPA emission factors. OilPriceAPI grants no rights in any of the underlying data.
 
 = How often do prices update? =
 
