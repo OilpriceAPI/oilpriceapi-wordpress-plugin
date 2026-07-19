@@ -1,0 +1,158 @@
+.oilpriceapi-widget {
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
+  max-width: 720px;
+  border: 1px solid var(--opa-border);
+  border-radius: 8px;
+  padding: 18px;
+  background: var(--opa-bg);
+  color: var(--opa-text);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  line-height: 1.4;
+}
+
+.oilpriceapi-widget *,
+.oilpriceapi-widget *::before,
+.oilpriceapi-widget *::after {
+  box-sizing: inherit;
+}
+
+.oilpriceapi-widget--dark {
+  --opa-bg: #15191e;
+  --opa-panel: #222830;
+  --opa-border: #3a434e;
+  --opa-text: #f7f8fa;
+  --opa-muted: #b4bdc8;
+  --opa-link: #6fb4ff;
+  --opa-accent: #ff9a3d;
+  --opa-warning: #ffd166;
+}
+
+.oilpriceapi-widget--light {
+  --opa-bg: #ffffff;
+  --opa-panel: #f3f5f7;
+  --opa-border: #d8dee5;
+  --opa-text: #17202a;
+  --opa-muted: #596675;
+  --opa-link: #075fa8;
+  --opa-accent: #c45200;
+  --opa-warning: #8b5a00;
+}
+
+.oilpriceapi-widget a {
+  color: var(--opa-link);
+}
+
+.oilpriceapi-widget__title {
+  margin: 0 0 14px;
+  color: var(--opa-text);
+  font-size: 18px;
+  letter-spacing: 0;
+}
+
+.oilpriceapi-widget__prices {
+  display: flex;
+  gap: 12px;
+}
+
+.oilpriceapi-widget__prices--vertical {
+  flex-direction: column;
+}
+
+.oilpriceapi-widget__price {
+  min-width: 150px;
+  flex: 1 1 0;
+  padding: 14px;
+  border-radius: 6px;
+  background: var(--opa-panel);
+  text-align: center;
+}
+
+.oilpriceapi-widget__price span,
+.oilpriceapi-widget__featured span {
+  display: block;
+}
+
+.oilpriceapi-widget__price strong,
+.oilpriceapi-widget__featured strong {
+  display: block;
+  margin: 3px 0;
+  color: var(--opa-text);
+  font-size: 28px;
+}
+
+.oilpriceapi-widget__label,
+.oilpriceapi-widget__unit,
+.oilpriceapi-widget__featured span,
+.oilpriceapi-widget__source {
+  color: var(--opa-muted);
+  font-size: 12px;
+}
+
+.oilpriceapi-widget__featured {
+  padding: 16px;
+  border-radius: 6px;
+  background: var(--opa-panel);
+  text-align: center;
+}
+
+.oilpriceapi-widget__source {
+  display: grid;
+  gap: 3px;
+  margin-top: 14px;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.oilpriceapi-widget__stale {
+  color: var(--opa-warning);
+  font-weight: 600;
+}
+
+.oilpriceapi-widget__calculation {
+  display: grid;
+  gap: 8px;
+  margin: 0;
+}
+
+.oilpriceapi-widget__calculation > div {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 10px 12px;
+  border-radius: 6px;
+  background: var(--opa-panel);
+}
+
+.oilpriceapi-widget__calculation dt,
+.oilpriceapi-widget__calculation dd {
+  margin: 0;
+}
+
+.oilpriceapi-widget__calculation dd {
+  font-weight: 700;
+}
+
+.oilpriceapi-widget__result dd {
+  color: var(--opa-accent);
+}
+
+.oilpriceapi-widget__message,
+.oilpriceapi-widget__action {
+  margin: 8px 0 0;
+}
+
+@media (max-width: 520px) {
+  .oilpriceapi-widget__prices {
+    flex-direction: column;
+  }
+
+  .oilpriceapi-widget__calculation > div {
+    display: block;
+  }
+
+  .oilpriceapi-widget__calculation dd {
+    margin-top: 3px;
+  }
+}

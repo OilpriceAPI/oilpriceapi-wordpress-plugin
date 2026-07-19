@@ -1,9 +1,9 @@
 <?php
 /**
- * Plugin Name: OilPriceAPI Widgets
+ * Plugin Name: OilPriceAPI Fuel Widgets
  * Plugin URI: https://www.oilpriceapi.com/widgets
- * Description: Embed live oil prices, diesel prices, fuel surcharge calculator, and carbon cost calculator on your WordPress site.
- * Version: 1.0.1
+ * Description: Embed source-dated weekly U.S. diesel and gasoline prices and a fuel surcharge calculator.
+ * Version: 1.1.0
  * Requires at least: 6.0
  * Tested up to: 7.0
  * Requires PHP: 7.4
@@ -18,14 +18,14 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-define( 'OILPRICEAPI_WIDGET_VERSION', '1.0.1' );
-define( 'OILPRICEAPI_WIDGET_URL', 'https://www.oilpriceapi.com/widgets/' );
+define( 'OILPRICEAPI_WIDGET_VERSION', '1.1.0' );
 define( 'OILPRICEAPI_WIDGET_PATH', plugin_dir_path( __FILE__ ) );
 define( 'OILPRICEAPI_WIDGET_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
 
 /**
  * Load plugin dependencies.
  */
+require_once OILPRICEAPI_WIDGET_PATH . 'includes/class-widget-data.php';
 require_once OILPRICEAPI_WIDGET_PATH . 'includes/class-shortcodes.php';
 require_once OILPRICEAPI_WIDGET_PATH . 'admin/class-settings.php';
 
@@ -71,19 +71,16 @@ add_action( 'init', 'oilpriceapi_widget_register_block' );
 function oilpriceapi_widget_block_render( $attributes ) {
     $widget_type  = isset( $attributes['widgetType'] ) ? $attributes['widgetType'] : 'ticker';
     $theme        = isset( $attributes['theme'] ) ? $attributes['theme'] : oilpriceapi_widget_get_default( 'theme' );
-    $commodities  = isset( $attributes['commodities'] ) ? $attributes['commodities'] : oilpriceapi_widget_get_default( 'commodities' );
+    $fuels        = isset( $attributes['fuels'] ) ? $attributes['fuels'] : oilpriceapi_widget_get_default( 'fuels' );
     $layout       = isset( $attributes['layout'] ) ? $attributes['layout'] : 'horizontal';
-    $regional     = isset( $attributes['regional'] ) ? $attributes['regional'] : 'true';
     $base_price   = isset( $attributes['basePrice'] ) ? $attributes['basePrice'] : oilpriceapi_widget_get_default( 'base_price' );
-    $carbon_price = isset( $attributes['carbonPrice'] ) ? $attributes['carbonPrice'] : oilpriceapi_widget_get_default( 'carbon_price' );
 
     $shortcodes = new OilPriceAPI_Shortcodes();
 
     switch ( $widget_type ) {
         case 'diesel':
             return $shortcodes->render_diesel( array(
-                'theme'    => $theme,
-                'regional' => $regional,
+                'theme' => $theme,
             ) );
         case 'fuel-surcharge':
             return $shortcodes->render_fuel_surcharge( array(
@@ -92,14 +89,13 @@ function oilpriceapi_widget_block_render( $attributes ) {
             ) );
         case 'carbon':
             return $shortcodes->render_carbon( array(
-                'theme'        => $theme,
-                'carbon_price' => $carbon_price,
+                'theme' => $theme,
             ) );
         default:
             return $shortcodes->render_ticker( array(
-                'theme'       => $theme,
-                'commodities' => $commodities,
-                'layout'      => $layout,
+                'theme'  => $theme,
+                'fuels'  => $fuels,
+                'layout' => $layout,
             ) );
     }
 }
@@ -114,10 +110,9 @@ function oilpriceapi_widget_get_default( $key ) {
     $options = get_option( 'oilpriceapi_widget_settings', array() );
 
     $defaults = array(
-        'theme'        => 'dark',
-        'commodities'  => 'BRENT,WTI',
-        'base_price'   => '2.50',
-        'carbon_price' => '50',
+        'theme'      => 'dark',
+        'fuels'      => 'diesel,gasoline',
+        'base_price' => '2.50',
     );
 
     if ( isset( $options[ $key ] ) && '' !== $options[ $key ] ) {

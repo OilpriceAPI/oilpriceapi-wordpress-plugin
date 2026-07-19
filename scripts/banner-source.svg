@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1544" height="500" viewBox="0 0 1544 500" role="img" aria-labelledby="title description">
+  <title id="title">OilPriceAPI Fuel Widgets</title>
+  <desc id="description">Weekly U.S. diesel and gasoline prices with source date and EIA attribution.</desc>
+  <rect width="1544" height="500" fill="#ffffff"/>
+  <rect y="405" width="1544" height="95" fill="#fff6f6"/>
+  <rect y="490" width="1544" height="10" fill="#e8424d"/>
+
+  <g transform="translate(108 92) scale(1.72)">
+    <path d="M5 25c0 0 3.651 13.037 12.95 16.87C27.249 45.704 65 49.734 65 49.734l55.506-11.292L125 25v103l-60-10.67L5 128V25z" fill="#e8424d" fill-opacity=".95"/>
+    <ellipse cx="65" cy="24.5" rx="65" ry="24.5" fill="#e8424d" fill-opacity=".95" stroke="#e8424d" stroke-width="10"/>
+    <ellipse cx="31" cy="24" rx="9" ry="4" fill="#ffffff"/>
+    <ellipse cx="65" cy="83.5" rx="65" ry="24.5" fill="none" stroke="#e8424d" stroke-width="10"/>
+    <ellipse cx="65" cy="142.5" rx="65" ry="24.5" fill="#e8424d" fill-opacity=".95" stroke="#e8424d" stroke-width="10"/>
+  </g>
+
+  <g font-family="Arial, Helvetica, sans-serif">
+    <text x="420" y="172" fill="#342526" font-size="72" font-weight="700" letter-spacing="0">OilPriceAPI Fuel Widgets</text>
+    <text x="420" y="247" fill="#5f666d" font-size="36" letter-spacing="0">Weekly U.S. diesel &amp; gasoline prices</text>
+    <text x="420" y="302" fill="#5f666d" font-size="30" letter-spacing="0">Source date and EIA attribution included. No API key required.</text>
+    <text x="420" y="376" fill="#e8424d" font-size="30" font-weight="700" letter-spacing="0">by OilPriceAPI</text>
+  </g>
+</svg>

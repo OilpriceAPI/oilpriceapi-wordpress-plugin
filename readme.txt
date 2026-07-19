@@ -1,143 +1,128 @@
-=== OilPriceAPI Widgets ===
+=== OilPriceAPI Fuel Widgets ===
 Contributors: oilpriceapi
-Tags: oil price, diesel, fuel surcharge, commodity prices, widget
+Tags: diesel price, gasoline price, fuel surcharge, eia, widget
 Requires at least: 6.0
 Tested up to: 7.0
-Stable tag: 1.0.1
+Stable tag: 1.1.0
 Requires PHP: 7.4
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
-Live oil, diesel, and natural gas price widgets plus fuel surcharge and carbon calculators. No API key or account required.
+Source-dated weekly U.S. diesel and gasoline price widgets using public-domain EIA retail-fuel series.
 
 == Description ==
 
-Give your visitors live energy prices without writing a line of code. OilPriceAPI Widgets adds four production-ready widgets to any WordPress site, as shortcodes or Gutenberg blocks:
+OilPriceAPI Fuel Widgets adds source-dated U.S. retail-fuel data to WordPress as shortcodes or a Gutenberg block.
 
-= Oil Price Ticker =
-Live Brent Crude, WTI, and Natural Gas prices with 24-hour change indicators. Horizontal or vertical layouts, dark or light theme.
+= Fuel Price Ticker =
 
-= Diesel Price Tracker =
-Current U.S. national and regional retail diesel prices — East Coast, Midwest, Gulf Coast, Rocky Mountain, West Coast, and California — updated weekly from EIA data.
+National U.S. diesel and regular gasoline averages. Each result shows its EIA observation week, weekly cadence, unit, and source.
+
+= U.S. Diesel Price =
+
+The national U.S. diesel retail average, quoted in USD per gallon and labeled with its observation week.
 
 = Fuel Surcharge Calculator =
-Industry-standard fuel surcharge calculation from the current diesel price and your configurable base price. Used by trucking and logistics companies to publish surcharge schedules.
 
-= Carbon Cost Calculator =
-CO2 emissions and carbon cost estimates based on EPA emission factors and a configurable carbon price. Useful for ESG reporting and sustainability content.
-
-All four widgets work immediately after install — **no API key, no account, no configuration required**. Prices come from [OilPriceAPI](https://www.oilpriceapi.com/?utm_source=wordpress-plugin&utm_medium=readme&utm_campaign=description), the commodity price API used by energy, logistics, and fintech teams.
+Calculates the percentage by which the weekly national diesel average exceeds a base price configured by the site owner. It does not describe the result as an industry standard or a contractual surcharge.
 
 = Features =
 
-* **No API key required** — widgets work immediately after install
-* **Dark and light themes** — match your site design
-* **Lightweight** — each widget is under 30KB, loaded async, only on pages that use it
-* **Auto-updating** — prices refresh every 5 minutes
-* **Shortcodes and Gutenberg block** — use either method
-* **Configurable defaults** — set once in Settings > OilPriceAPI, override per widget
-* **Responsive** — works on mobile and desktop
+* Source date, weekly cadence, currency, unit, and EIA attribution in every successful widget
+* Dark and light themes
+* Shortcodes and Gutenberg block
+* Server-side requests with no remote executable code
+* One-hour validated cache
+* Last successful result for up to 48 hours after an error, visibly labeled as a cached copy
+* Fail-closed handling for unavailable, rate-limited, timed-out, empty, or malformed responses
+* No API key required for the public EIA series
 
-= For developers =
+== External service ==
 
-Need the raw data behind the widgets — historical prices, more commodities, or programmatic access?
+This plugin uses OilPriceAPI to retrieve the EIA retail-fuel series displayed by the widgets.
 
-* [Get a free API key](https://www.oilpriceapi.com/signup?utm_source=wordpress-plugin&utm_medium=readme&utm_campaign=developers) — the free tier includes 200 requests/month
-* PHP SDK: `composer require oilpriceapi/oilpriceapi`
-* [API documentation](https://docs.oilpriceapi.com/?utm_source=wordpress-plugin&utm_medium=readme)
-* [Interactive API explorer](https://api.oilpriceapi.com/swagger)
+The WordPress server sends a GET request to `https://www.oilpriceapi.com/api/widgets/fuel-prices` at most once per hour while a page containing a widget is requested. OilPriceAPI receives the site server's IP address and standard HTTP request metadata. The plugin does not send the visitor's IP address, WordPress user data, page content, or an API credential.
+
+The underlying retail-fuel observations come from the [U.S. Energy Information Administration](https://www.eia.gov/petroleum/gasdiesel/) and are public domain at the source. OilPriceAPI delivers and validates the response; it does not grant rights in underlying data.
+
+* [OilPriceAPI privacy policy](https://www.oilpriceapi.com/privacy)
+* [OilPriceAPI terms](https://www.oilpriceapi.com/terms)
+* [OilPriceAPI service status](https://status.oilpriceapi.com/)
 
 == Installation ==
 
-1. Upload the `oilpriceapi-widget` folder to `/wp-content/plugins/`
-2. Activate the plugin through the Plugins menu
-3. Use shortcodes in your posts/pages or add the Gutenberg block
+1. Upload the `oilpriceapi-widget` folder to `/wp-content/plugins/`.
+2. Activate **OilPriceAPI Fuel Widgets** through the Plugins screen.
+3. Add an OilPriceAPI block or one of the shortcodes below to a page.
 
 = Quick Start =
 
-Add any of these shortcodes to a post or page:
+* `[oilpriceapi_ticker]` - weekly national diesel and gasoline prices
+* `[oilpriceapi_diesel]` - weekly national diesel price
+* `[oilpriceapi_fuel_surcharge base_price="2.50"]` - percentage above the configured base
 
-* `[oilpriceapi_ticker]` — Oil price ticker
-* `[oilpriceapi_diesel]` — Diesel prices
-* `[oilpriceapi_fuel_surcharge]` — Fuel surcharge calculator
-* `[oilpriceapi_carbon]` — Carbon cost calculator
-
-Or search for "OilPriceAPI" in the Gutenberg block inserter.
+Configure default theme, fuels, and base price under **Settings > OilPriceAPI**.
 
 == Frequently Asked Questions ==
 
 = Do I need an API key? =
 
-No. The widgets are completely free and work without any API key or account. They use the public OilPriceAPI widget endpoints.
+No. These widgets use a public OilPriceAPI route restricted to two EIA public-domain retail-fuel series.
 
-= Where does the price data come from? =
+= How current is the data? =
 
-Oil and natural gas prices are collected from public market sources and delivered through the OilPriceAPI API — we are the delivery route, not the origin. U.S. diesel retail prices are EIA (U.S. Energy Information Administration) series: public domain at the source, so no permission is needed from us, and none is ours to give. Carbon calculations use EPA emission factors. OilPriceAPI grants no rights in any of the underlying data.
+EIA publishes these retail-fuel series weekly. Every successful widget shows the source observation as `Week of` followed by a date and says `Updated weekly`.
 
-= How often do prices update? =
+= What happens if the service is unavailable? =
 
-Prices refresh automatically every 5 minutes while the page is open. Oil prices update during market hours (Sunday 5pm ET to Friday 5pm ET). Diesel prices update weekly from EIA data.
+The plugin can show its last successful response for up to 48 hours. That state is visibly labeled `Cached copy; service temporarily unavailable`. After 48 hours, the price is removed and the widget links to the service status page.
 
-= Can I customize the appearance? =
+= What does the plugin cache? =
 
-Yes. Each widget supports dark and light themes. The ticker widget also supports horizontal and vertical layouts. Configure defaults under Settings > OilPriceAPI, or override per shortcode.
+Only the validated fuel-price payload, its EIA source date, and the time it was retrieved. The fresh cache lasts one hour. The last-success cache lasts no more than 48 hours.
 
-= Will this slow down my site? =
+= Can I display crude oil or natural gas prices? =
 
-No. Widget scripts load asynchronously and only on pages where widgets are used. Each script is under 30KB with no external dependencies.
+Not with this public widget. OilPriceAPI does not hold downstream display or redistribution rights for the crude and natural-gas inputs previously shown by the ticker. Review the [data-use guidance](https://www.oilpriceapi.com/docs/redistribution) before publishing API data to third parties.
 
-= What commodities are supported? =
+= What happened to the carbon calculator and regional diesel display? =
 
-The ticker widget supports Brent Crude, WTI Crude, and Natural Gas. Many more commodities (gasoline, heating oil, coal, EU carbon allowances, and others) are available through the full [OilPriceAPI](https://www.oilpriceapi.com/?utm_source=wordpress-plugin&utm_medium=readme&utm_campaign=faq).
+Version 1.1 retired the carbon calculator's uncleared crude-price input and removed unsupported regional diesel output. An existing carbon shortcode shows a retirement notice instead of silently displaying a fabricated or uncleared value.
 
-= Can I use multiple widgets on the same page? =
+= Where can developers get programmatic access? =
 
-Yes. You can place different widget types on the same page. Each widget operates independently.
-
-= I need historical data or programmatic access — what are my options? =
-
-Sign up for a [free API key](https://www.oilpriceapi.com/signup?utm_source=wordpress-plugin&utm_medium=readme&utm_campaign=faq) (200 requests/month included). PHP developers can install the official SDK with `composer require oilpriceapi/oilpriceapi`, and you can try every endpoint in the [interactive API explorer](https://api.oilpriceapi.com/swagger).
+See the [API documentation](https://docs.oilpriceapi.com/) and the official [PHP SDK](https://packagist.org/packages/oilpriceapi/oilpriceapi).
 
 == Screenshots ==
 
-1. Oil Price Ticker — configure theme, commodities, and layout with live preview
-2. Diesel Price Tracker — national average and 6 regional U.S. diesel prices
-3. Fuel Surcharge Calculator — real-time diesel-based surcharge calculation
-4. Carbon Cost Calculator — CO2 emissions and carbon cost from oil consumption
+1. Fuel Price Ticker with weekly national diesel and gasoline prices, source date, and EIA attribution
+2. U.S. Diesel Price widget with national average and observation week
+3. Fuel Surcharge Calculator showing the configured base and percentage above base
+4. Gutenberg block controls for widget type, theme, fuel selection, layout, and base price
 
 == Changelog ==
 
+= 1.1.0 =
+
+* Replaced crude and natural-gas public display with allowlisted EIA diesel and gasoline series
+* Added visible source date, weekly cadence, unit, and EIA attribution
+* Moved rendering server-side and removed remote executable widget scripts
+* Added strict response validation and fail-closed recovery states
+* Added one-hour fresh caching and an explicitly labeled 48-hour last-success fallback
+* Retired the carbon widget's uncleared crude-price dependency
+* Removed unsupported regional diesel output and unsupported marketing claims
+* Added deterministic failure-path tests and CI
+
 = 1.0.1 =
-* Compatibility: tested up to WordPress 7.0
-* Documentation: expanded FAQ, developer resources, and ecosystem links
-* No functional changes
+
+* Confirmed WordPress compatibility and expanded directory documentation
 
 = 1.0.0 =
-* Initial release
-* Four widgets: Oil Price Ticker, Diesel Price Tracker, Fuel Surcharge Calculator, Carbon Cost Calculator
-* Shortcode support with customizable attributes
-* Gutenberg block with sidebar controls
-* Settings page with default configuration
-* Dark and light theme support
 
-== Also Available As ==
-
-OilPriceAPI is available across many platforms:
-
-* **Python SDK**: [pypi.org/project/oilpriceapi](https://pypi.org/project/oilpriceapi/) — Python client with Pandas integration
-* **Node.js SDK**: [npmjs.com/package/oilpriceapi](https://www.npmjs.com/package/oilpriceapi) — TypeScript/JavaScript SDK
-* **PHP SDK**: [packagist.org/packages/oilpriceapi/oilpriceapi](https://packagist.org/packages/oilpriceapi/oilpriceapi) — `composer require oilpriceapi/oilpriceapi`
-* **Go SDK**: [github.com/OilpriceAPI/oilpriceapi-go](https://github.com/OilpriceAPI/oilpriceapi-go) — Go client
-* **MCP Server**: [github.com/OilpriceAPI/mcp-server](https://github.com/OilpriceAPI/mcp-server) — oil prices in Claude and other AI assistants
-* **Google Sheets Add-on**: Custom functions like =OILPRICE("BRENT_CRUDE_USD")
-* **Excel Add-in**: Energy price comparison in Excel
-
-Get your free API key at [oilpriceapi.com/signup](https://www.oilpriceapi.com/signup?utm_source=wordpress-plugin&utm_medium=readme&utm_campaign=also-available).
+* Initial plugin release
 
 == Upgrade Notice ==
 
-= 1.0.1 =
-WordPress 7.0 compatibility confirmation and documentation updates. No functional changes.
+= 1.1.0 =
 
-= 1.0.0 =
-Initial release with four free commodity price widgets.
+This source-accuracy release replaces previously displayed crude and natural-gas data with source-dated weekly EIA retail-fuel series. Existing ticker shortcodes continue to render; existing carbon shortcodes show a retirement notice.
