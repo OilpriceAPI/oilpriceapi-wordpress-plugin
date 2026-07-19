@@ -7,9 +7,14 @@ $block  = file_get_contents( $root . '/blocks/oil-price-widget/block.json' );
 
 preg_match( '/^ \* Version: ([0-9.]+)$/m', $plugin, $plugin_version );
 preg_match( '/^Stable tag: ([0-9.]+)$/m', $readme, $stable_tag );
+preg_match( '/^ \* Text Domain: ([a-z0-9-]+)$/m', $plugin, $text_domain );
 
 if ( empty( $plugin_version[1] ) || empty( $stable_tag[1] ) || $plugin_version[1] !== $stable_tag[1] ) {
     throw new RuntimeException( 'Plugin header and stable tag must match.' );
+}
+
+if ( empty( $text_domain[1] ) || 'oilpriceapi-widgets' !== $text_domain[1] ) {
+    throw new RuntimeException( 'Text domain must match the approved WordPress.org slug.' );
 }
 
 $active_files = array(
@@ -19,6 +24,10 @@ $active_files = array(
     'blocks/oil-price-widget/block.json',
     'blocks/oil-price-widget/index.js',
 );
+
+if ( false !== strpos( $plugin, 'page=oilpriceapi-widget\'' ) || false !== strpos( file_get_contents( $root . '/admin/class-settings.php' ), 'settings_page_oilpriceapi-widget\'' ) ) {
+    throw new RuntimeException( 'Admin page links and hooks must use the approved plural slug.' );
+}
 
 $forbidden = array(
     '/\b(BRENT|WTI|NATGAS)\b/i'                      => 'encumbered or retired commodity selector',
@@ -53,4 +62,4 @@ foreach ( $iterator as $file ) {
     }
 }
 
-echo "PASS: version sync, block JSON, active-surface claims, and credential scan\n";
+echo "PASS: version/text-domain sync, block JSON, active-surface claims, and credential scan\n";

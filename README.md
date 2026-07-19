@@ -16,7 +16,7 @@ The same widgets are available in the Gutenberg block editor. Dark and light the
 
 ## Installation
 
-1. Upload the plugin directory to `/wp-content/plugins/oilpriceapi-widget/`.
+1. Upload the plugin directory to `/wp-content/plugins/oilpriceapi-widgets/`.
 2. Activate **OilPriceAPI Fuel Widgets** in the WordPress Plugins screen.
 3. Add an OilPriceAPI block or one of the shortcodes above to a page.
 
@@ -47,14 +47,14 @@ find . -name '*.php' -not -path './vendor/*' -print0 | xargs -0 -n1 php -l
 
 The suite covers valid data, fresh caching, 401/403/429/500 responses, timeout, malformed and empty payloads, an encumbered series, explicit stale rendering, cache expiry, and the public recovery state.
 
-Build the release archive, then run a clean WordPress activation and the official Plugin Check CLI against the packaged `oilpriceapi-widget` slug:
+Build the release archive, then run a clean WordPress activation and the official Plugin Check CLI against the approved `oilpriceapi-widgets` directory slug:
 
 ```bash
 npx --yes @wordpress/env stop
 ./scripts/build-release.sh
 npx --yes @wordpress/env start
-npx --yes @wordpress/env run cli wp plugin activate oilpriceapi-widget
-npx --yes @wordpress/env run cli wp plugin check oilpriceapi-widget
+npx --yes @wordpress/env run cli wp plugin activate oilpriceapi-widgets
+npx --yes @wordpress/env run cli wp plugin check oilpriceapi-widgets
 npx --yes @wordpress/env stop
 ```
 

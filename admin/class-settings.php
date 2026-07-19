@@ -27,10 +27,10 @@ class OilPriceAPI_Settings {
      */
     public function add_settings_page() {
         add_options_page(
-            __( 'OilPriceAPI Widgets', 'oilpriceapi-widget' ),
-            __( 'OilPriceAPI', 'oilpriceapi-widget' ),
+            __( 'OilPriceAPI Widgets', 'oilpriceapi-widgets' ),
+            __( 'OilPriceAPI', 'oilpriceapi-widgets' ),
             'manage_options',
-            'oilpriceapi-widget',
+            'oilpriceapi-widgets',
             array( $this, 'render_settings_page' )
         );
     }
@@ -41,7 +41,7 @@ class OilPriceAPI_Settings {
      * @param string $hook Current admin page hook.
      */
     public function enqueue_admin_styles( $hook ) {
-        if ( 'settings_page_oilpriceapi-widget' !== $hook ) {
+        if ( 'settings_page_oilpriceapi-widgets' !== $hook ) {
             return;
         }
         wp_enqueue_style(
@@ -64,32 +64,32 @@ class OilPriceAPI_Settings {
 
         add_settings_section(
             'oilpriceapi_defaults_section',
-            __( 'Default Settings', 'oilpriceapi-widget' ),
+            __( 'Default Settings', 'oilpriceapi-widgets' ),
             array( $this, 'render_section_description' ),
-            'oilpriceapi-widget'
+            'oilpriceapi-widgets'
         );
 
         add_settings_field(
             'theme',
-            __( 'Default Theme', 'oilpriceapi-widget' ),
+            __( 'Default Theme', 'oilpriceapi-widgets' ),
             array( $this, 'render_theme_field' ),
-            'oilpriceapi-widget',
+            'oilpriceapi-widgets',
             'oilpriceapi_defaults_section'
         );
 
         add_settings_field(
             'fuels',
-            __( 'Default Fuels', 'oilpriceapi-widget' ),
+            __( 'Default Fuels', 'oilpriceapi-widgets' ),
             array( $this, 'render_fuels_field' ),
-            'oilpriceapi-widget',
+            'oilpriceapi-widgets',
             'oilpriceapi_defaults_section'
         );
 
         add_settings_field(
             'base_price',
-            __( 'Default Base Fuel Price', 'oilpriceapi-widget' ),
+            __( 'Default Base Fuel Price', 'oilpriceapi-widgets' ),
             array( $this, 'render_base_price_field' ),
-            'oilpriceapi-widget',
+            'oilpriceapi-widgets',
             'oilpriceapi_defaults_section'
         );
 
@@ -129,7 +129,7 @@ class OilPriceAPI_Settings {
      * Render the section description.
      */
     public function render_section_description() {
-        echo '<p>' . esc_html__( 'Configure default values for OilPriceAPI widgets. These can be overridden per-shortcode.', 'oilpriceapi-widget' ) . '</p>';
+        echo '<p>' . esc_html__( 'Configure default values for OilPriceAPI widgets. These can be overridden per-shortcode.', 'oilpriceapi-widgets' ) . '</p>';
     }
 
     /**
@@ -139,8 +139,8 @@ class OilPriceAPI_Settings {
         $value = oilpriceapi_widget_get_default( 'theme' );
         ?>
         <select name="oilpriceapi_widget_settings[theme]">
-            <option value="dark" <?php selected( $value, 'dark' ); ?>><?php esc_html_e( 'Dark', 'oilpriceapi-widget' ); ?></option>
-            <option value="light" <?php selected( $value, 'light' ); ?>><?php esc_html_e( 'Light', 'oilpriceapi-widget' ); ?></option>
+            <option value="dark" <?php selected( $value, 'dark' ); ?>><?php esc_html_e( 'Dark', 'oilpriceapi-widgets' ); ?></option>
+            <option value="light" <?php selected( $value, 'light' ); ?>><?php esc_html_e( 'Light', 'oilpriceapi-widgets' ); ?></option>
         </select>
         <?php
     }
@@ -163,7 +163,7 @@ class OilPriceAPI_Settings {
                 esc_html( $label )
             );
         }
-        echo '<p class="description">' . esc_html__( 'Weekly EIA retail-fuel series shown in the Fuel Price Ticker.', 'oilpriceapi-widget' ) . '</p>';
+        echo '<p class="description">' . esc_html__( 'Weekly EIA retail-fuel series shown in the Fuel Price Ticker.', 'oilpriceapi-widgets' ) . '</p>';
     }
 
     /**
@@ -175,7 +175,7 @@ class OilPriceAPI_Settings {
             '<input type="text" name="oilpriceapi_widget_settings[base_price]" value="%s" class="small-text" /> <span>$/gallon</span>',
             esc_attr( $value )
         );
-        echo '<p class="description">' . esc_html__( 'Base fuel price for the Fuel Surcharge Calculator.', 'oilpriceapi-widget' ) . '</p>';
+        echo '<p class="description">' . esc_html__( 'Base fuel price for the Fuel Surcharge Calculator.', 'oilpriceapi-widgets' ) . '</p>';
     }
 
     /**
@@ -187,37 +187,37 @@ class OilPriceAPI_Settings {
         }
         ?>
         <div class="wrap oilpriceapi-settings">
-            <h1><?php esc_html_e( 'OilPriceAPI Widgets', 'oilpriceapi-widget' ); ?></h1>
+            <h1><?php esc_html_e( 'OilPriceAPI Widgets', 'oilpriceapi-widgets' ); ?></h1>
 
             <form method="post" action="options.php">
                 <?php
                 settings_fields( 'oilpriceapi_widget_settings_group' );
-                do_settings_sections( 'oilpriceapi-widget' );
+                do_settings_sections( 'oilpriceapi-widgets' );
                 submit_button();
                 ?>
             </form>
 
             <hr />
 
-            <h2><?php esc_html_e( 'Shortcode Reference', 'oilpriceapi-widget' ); ?></h2>
+            <h2><?php esc_html_e( 'Shortcode Reference', 'oilpriceapi-widgets' ); ?></h2>
 
             <div class="oilpriceapi-shortcode-ref">
-                <h3><?php esc_html_e( 'Fuel Price Ticker', 'oilpriceapi-widget' ); ?></h3>
+                <h3><?php esc_html_e( 'Fuel Price Ticker', 'oilpriceapi-widgets' ); ?></h3>
                 <code id="shortcode-ticker">[oilpriceapi_ticker theme="dark" fuels="diesel,gasoline" layout="horizontal"]</code>
                 <button type="button" class="button oilpriceapi-copy-btn" data-target="shortcode-ticker">
-                    <?php esc_html_e( 'Copy', 'oilpriceapi-widget' ); ?>
+                    <?php esc_html_e( 'Copy', 'oilpriceapi-widgets' ); ?>
                 </button>
 
-                <h3><?php esc_html_e( 'U.S. Diesel Price', 'oilpriceapi-widget' ); ?></h3>
+                <h3><?php esc_html_e( 'U.S. Diesel Price', 'oilpriceapi-widgets' ); ?></h3>
                 <code id="shortcode-diesel">[oilpriceapi_diesel theme="dark"]</code>
                 <button type="button" class="button oilpriceapi-copy-btn" data-target="shortcode-diesel">
-                    <?php esc_html_e( 'Copy', 'oilpriceapi-widget' ); ?>
+                    <?php esc_html_e( 'Copy', 'oilpriceapi-widgets' ); ?>
                 </button>
 
-                <h3><?php esc_html_e( 'Fuel Surcharge Calculator', 'oilpriceapi-widget' ); ?></h3>
+                <h3><?php esc_html_e( 'Fuel Surcharge Calculator', 'oilpriceapi-widgets' ); ?></h3>
                 <code id="shortcode-fuel">[oilpriceapi_fuel_surcharge theme="dark" base_price="2.50"]</code>
                 <button type="button" class="button oilpriceapi-copy-btn" data-target="shortcode-fuel">
-                    <?php esc_html_e( 'Copy', 'oilpriceapi-widget' ); ?>
+                    <?php esc_html_e( 'Copy', 'oilpriceapi-widgets' ); ?>
                 </button>
 
             </div>
@@ -228,8 +228,8 @@ class OilPriceAPI_Settings {
                 <?php
                 printf(
                     /* translators: %s: link to widget configurator */
-                    esc_html__( 'Need help? Visit the %s for interactive previews and configuration.', 'oilpriceapi-widget' ),
-                    '<a href="https://www.oilpriceapi.com/widgets" target="_blank" rel="noopener noreferrer">' . esc_html__( 'OilPriceAPI Widget Configurator', 'oilpriceapi-widget' ) . '</a>'
+                    esc_html__( 'Need help? Visit the %s for interactive previews and configuration.', 'oilpriceapi-widgets' ),
+                    '<a href="https://www.oilpriceapi.com/widgets" target="_blank" rel="noopener noreferrer">' . esc_html__( 'OilPriceAPI Widget Configurator', 'oilpriceapi-widgets' ) . '</a>'
                 );
                 ?>
             </p>
@@ -243,9 +243,9 @@ class OilPriceAPI_Settings {
                     var target = document.getElementById(this.getAttribute('data-target'));
                     if (target && navigator.clipboard) {
                         navigator.clipboard.writeText(target.textContent).then(function() {
-                            btn.textContent = '<?php echo esc_js( __( 'Copied!', 'oilpriceapi-widget' ) ); ?>';
+                            btn.textContent = '<?php echo esc_js( __( 'Copied!', 'oilpriceapi-widgets' ) ); ?>';
                             setTimeout(function() {
-                                btn.textContent = '<?php echo esc_js( __( 'Copy', 'oilpriceapi-widget' ) ); ?>';
+                                btn.textContent = '<?php echo esc_js( __( 'Copy', 'oilpriceapi-widgets' ) ); ?>';
                             }, 2000);
                         });
                     }

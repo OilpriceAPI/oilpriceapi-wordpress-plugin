@@ -115,7 +115,7 @@ function plugin_dir_path( $file ) {
 }
 
 function plugin_dir_url() {
-    return 'https://example.test/wp-content/plugins/oilpriceapi-widget/';
+    return 'https://example.test/wp-content/plugins/oilpriceapi-widgets/';
 }
 
 function add_action() {
