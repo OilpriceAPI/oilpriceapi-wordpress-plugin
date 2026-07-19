@@ -2,7 +2,7 @@
   "$schema": "https://schemas.wp.org/trunk/block.json",
   "apiVersion": 3,
   "name": "oilpriceapi/widget",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "title": "OilPriceAPI Widget",
   "category": "embed",
   "icon": "chart-line",
@@ -16,7 +16,7 @@
     "energy",
     "widget"
   ],
-  "textdomain": "oilpriceapi-widget",
+  "textdomain": "oilpriceapi-widgets",
   "attributes": {
     "widgetType": {
       "type": "string",

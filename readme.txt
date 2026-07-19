@@ -3,7 +3,7 @@ Contributors: oilpriceapi
 Tags: diesel price, gasoline price, fuel surcharge, eia, widget
 Requires at least: 6.0
 Tested up to: 7.0
-Stable tag: 1.1.0
+Stable tag: 1.1.1
 Requires PHP: 7.4
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -51,7 +51,7 @@ The underlying retail-fuel observations come from the [U.S. Energy Information A
 
 == Installation ==
 
-1. Upload the `oilpriceapi-widget` folder to `/wp-content/plugins/`.
+1. Upload the `oilpriceapi-widgets` folder to `/wp-content/plugins/`.
 2. Activate **OilPriceAPI Fuel Widgets** through the Plugins screen.
 3. Add an OilPriceAPI block or one of the shortcodes below to a page.
 
@@ -102,6 +102,10 @@ See the [API documentation](https://docs.oilpriceapi.com/) and the official [PHP
 
 == Changelog ==
 
+= 1.1.1 =
+
+* Matched the package folder and text domain to the approved WordPress.org directory slug `oilpriceapi-widgets`
+
 = 1.1.0 =
 
 * Replaced crude and natural-gas public display with allowlisted EIA diesel and gasoline series
@@ -123,6 +127,6 @@ See the [API documentation](https://docs.oilpriceapi.com/) and the official [PHP
 
 == Upgrade Notice ==
 
-= 1.1.0 =
+= 1.1.1 =
 
-This source-accuracy release replaces previously displayed crude and natural-gas data with source-dated weekly EIA retail-fuel series. Existing ticker shortcodes continue to render; existing carbon shortcodes show a retirement notice.
+This directory-compatible source-accuracy release replaces previously displayed crude and natural-gas data with source-dated weekly EIA retail-fuel series. Existing ticker shortcodes continue to render; existing carbon shortcodes show a retirement notice.

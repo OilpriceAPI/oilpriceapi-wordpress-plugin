@@ -3,7 +3,7 @@
  * Plugin Name: OilPriceAPI Fuel Widgets
  * Plugin URI: https://www.oilpriceapi.com/widgets
  * Description: Embed source-dated weekly U.S. diesel and gasoline prices and a fuel surcharge calculator.
- * Version: 1.1.0
+ * Version: 1.1.1
  * Requires at least: 6.0
  * Tested up to: 7.0
  * Requires PHP: 7.4
@@ -11,14 +11,14 @@
  * Author URI: https://www.oilpriceapi.com
  * License: GPL v2 or later
  * License URI: https://www.gnu.org/licenses/gpl-2.0.html
- * Text Domain: oilpriceapi-widget
+ * Text Domain: oilpriceapi-widgets
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-define( 'OILPRICEAPI_WIDGET_VERSION', '1.1.0' );
+define( 'OILPRICEAPI_WIDGET_VERSION', '1.1.1' );
 define( 'OILPRICEAPI_WIDGET_PATH', plugin_dir_path( __FILE__ ) );
 define( 'OILPRICEAPI_WIDGET_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
 
@@ -129,7 +129,7 @@ function oilpriceapi_widget_get_default( $key ) {
  * @return array Modified links.
  */
 function oilpriceapi_widget_settings_link( $links ) {
-    $settings_link = '<a href="' . admin_url( 'options-general.php?page=oilpriceapi-widget' ) . '">' . __( 'Settings', 'oilpriceapi-widget' ) . '</a>';
+    $settings_link = '<a href="' . admin_url( 'options-general.php?page=oilpriceapi-widgets' ) . '">' . __( 'Settings', 'oilpriceapi-widgets' ) . '</a>';
     array_unshift( $links, $settings_link );
     return $links;
 }
