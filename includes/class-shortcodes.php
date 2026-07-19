@@ -1,8 +1,6 @@
 <?php
 /**
- * OilPriceAPI Widget Shortcodes
- *
- * Handles registration and rendering of all 4 widget shortcodes.
+ * OilPriceAPI widget shortcodes.
  *
  * @package OilPriceAPI_Widget
  */
@@ -13,58 +11,24 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 class OilPriceAPI_Shortcodes {
 
-    /**
-     * Track which scripts need to be enqueued.
-     *
-     * @var array
-     */
-    private $enqueued_scripts = array();
+    /** @var OilPriceAPI_Widget_Data */
+    private $data;
 
     /**
-     * Widget definitions.
-     *
-     * @var array
+     * @param OilPriceAPI_Widget_Data|null $data Data client, injectable for tests.
      */
-    private $widgets = array(
-        'ticker' => array(
-            'container_id' => 'oilpriceapi-ticker',
-            'script_file'  => 'ticker.js',
-            'handle'       => 'oilpriceapi-ticker',
-        ),
-        'diesel' => array(
-            'container_id' => 'oilpriceapi-diesel',
-            'script_file'  => 'diesel.js',
-            'handle'       => 'oilpriceapi-diesel',
-        ),
-        'fuel-surcharge' => array(
-            'container_id' => 'oilpriceapi-fuel-surcharge',
-            'script_file'  => 'fuel-surcharge.js',
-            'handle'       => 'oilpriceapi-fuel-surcharge',
-        ),
-        'carbon' => array(
-            'container_id' => 'oilpriceapi-carbon',
-            'script_file'  => 'carbon.js',
-            'handle'       => 'oilpriceapi-carbon',
-        ),
-    );
+    public function __construct( $data = null ) {
+        $this->data = $data ? $data : new OilPriceAPI_Widget_Data();
+    }
 
-    /**
-     * Register all shortcodes and script handles.
-     */
+    /** Register shortcodes and the local stylesheet. */
     public function register() {
-        // Register external scripts (not enqueued yet — only when shortcode is used).
-        foreach ( $this->widgets as $key => $widget ) {
-            wp_register_script(
-                $widget['handle'],
-                OILPRICEAPI_WIDGET_URL . $widget['script_file'],
-                array(),
-                OILPRICEAPI_WIDGET_VERSION,
-                array(
-                    'strategy' => 'async',
-                    'in_footer' => true,
-                )
-            );
-        }
+        wp_register_style(
+            'oilpriceapi-widgets',
+            OILPRICEAPI_WIDGET_PLUGIN_URL . 'assets/css/widgets.css',
+            array(),
+            OILPRICEAPI_WIDGET_VERSION
+        );
 
         add_shortcode( 'oilpriceapi_ticker', array( $this, 'render_ticker' ) );
         add_shortcode( 'oilpriceapi_diesel', array( $this, 'render_diesel' ) );
@@ -73,78 +37,75 @@ class OilPriceAPI_Shortcodes {
     }
 
     /**
-     * Enqueue a widget script only once.
-     *
-     * @param string $widget_key Widget identifier.
-     */
-    private function enqueue_widget_script( $widget_key ) {
-        if ( ! in_array( $widget_key, $this->enqueued_scripts, true ) ) {
-            wp_enqueue_script( $this->widgets[ $widget_key ]['handle'] );
-            $this->enqueued_scripts[] = $widget_key;
-        }
-    }
-
-    /**
-     * Render the Oil Price Ticker widget.
+     * Render weekly national diesel and gasoline prices.
      *
      * @param array $atts Shortcode attributes.
-     * @return string Widget HTML.
+     * @return string
      */
     public function render_ticker( $atts ) {
         $atts = shortcode_atts(
             array(
-                'theme'       => oilpriceapi_widget_get_default( 'theme' ),
-                'commodities' => oilpriceapi_widget_get_default( 'commodities' ),
-                'layout'      => 'horizontal',
+                'theme'  => oilpriceapi_widget_get_default( 'theme' ),
+                'fuels'  => oilpriceapi_widget_get_default( 'fuels' ),
+                'layout' => 'horizontal',
             ),
             $atts,
             'oilpriceapi_ticker'
         );
 
-        $this->enqueue_widget_script( 'ticker' );
+        $result = $this->data->get_prices();
+        if ( empty( $result['payload'] ) ) {
+            return $this->render_unavailable( $atts['theme'], 'Fuel Price Ticker' );
+        }
 
-        $data_attrs = sprintf(
-            ' data-theme="%s" data-commodities="%s" data-layout="%s"',
-            esc_attr( $atts['theme'] ),
-            esc_attr( $atts['commodities'] ),
-            esc_attr( $atts['layout'] )
-        );
+        $selected = $this->selected_fuels( $atts['fuels'] );
+        $items    = '';
+        foreach ( $selected as $key ) {
+            $price  = $result['payload']['prices'][ $key ];
+            $items .= '<div class="oilpriceapi-widget__price">';
+            $items .= '<span class="oilpriceapi-widget__label">' . esc_html( $price['label'] ) . '</span>';
+            $items .= '<strong>' . esc_html( $price['formatted'] ) . '</strong>';
+            $items .= '<span class="oilpriceapi-widget__unit">per gallon</span>';
+            $items .= '</div>';
+        }
 
-        return '<div id="' . esc_attr( $this->widgets['ticker']['container_id'] ) . '"' . $data_attrs . '></div>';
+        $layout = 'vertical' === $atts['layout'] ? 'vertical' : 'horizontal';
+        $body   = '<div class="oilpriceapi-widget__prices oilpriceapi-widget__prices--' . esc_attr( $layout ) . '">' . $items . '</div>';
+        $body  .= $this->render_source( $result );
+
+        return $this->render_shell( $body, $atts['theme'], 'fuel-ticker' );
     }
 
     /**
-     * Render the Diesel Price Tracker widget.
+     * Render the weekly national diesel price.
      *
-     * @param array $atts Shortcode attributes.
-     * @return string Widget HTML.
+     * @param array $atts Shortcode attributes. The legacy regional attribute is ignored.
+     * @return string
      */
     public function render_diesel( $atts ) {
         $atts = shortcode_atts(
-            array(
-                'theme'    => oilpriceapi_widget_get_default( 'theme' ),
-                'regional' => 'true',
-            ),
+            array( 'theme' => oilpriceapi_widget_get_default( 'theme' ) ),
             $atts,
             'oilpriceapi_diesel'
         );
+        $result = $this->data->get_prices();
+        if ( empty( $result['payload'] ) ) {
+            return $this->render_unavailable( $atts['theme'], 'U.S. Diesel Price' );
+        }
 
-        $this->enqueue_widget_script( 'diesel' );
+        $price = $result['payload']['prices']['diesel'];
+        $body  = '<h3 class="oilpriceapi-widget__title">U.S. Diesel Price</h3>';
+        $body .= '<div class="oilpriceapi-widget__featured"><strong>' . esc_html( $price['formatted'] ) . '</strong><span>per gallon, national average</span></div>';
+        $body .= $this->render_source( $result );
 
-        $data_attrs = sprintf(
-            ' data-theme="%s" data-regional="%s"',
-            esc_attr( $atts['theme'] ),
-            esc_attr( $atts['regional'] )
-        );
-
-        return '<div id="' . esc_attr( $this->widgets['diesel']['container_id'] ) . '"' . $data_attrs . '></div>';
+        return $this->render_shell( $body, $atts['theme'], 'diesel' );
     }
 
     /**
-     * Render the Fuel Surcharge Calculator widget.
+     * Render a percentage above the configured diesel base price.
      *
      * @param array $atts Shortcode attributes.
-     * @return string Widget HTML.
+     * @return string
      */
     public function render_fuel_surcharge( $atts ) {
         $atts = shortcode_atts(
@@ -155,42 +116,87 @@ class OilPriceAPI_Shortcodes {
             $atts,
             'oilpriceapi_fuel_surcharge'
         );
+        $result = $this->data->get_prices();
+        if ( empty( $result['payload'] ) ) {
+            return $this->render_unavailable( $atts['theme'], 'Fuel Surcharge Calculator' );
+        }
 
-        $this->enqueue_widget_script( 'fuel-surcharge' );
+        $base_price = is_numeric( $atts['base_price'] ) ? (float) $atts['base_price'] : 2.50;
+        if ( $base_price <= 0 ) {
+            $base_price = 2.50;
+        }
+        $diesel    = $result['payload']['prices']['diesel']['price'];
+        $surcharge = max( 0, ( ( $diesel - $base_price ) / $base_price ) * 100 );
 
-        $data_attrs = sprintf(
-            ' data-theme="%s" data-base-price="%s"',
-            esc_attr( $atts['theme'] ),
-            esc_attr( $atts['base_price'] )
-        );
+        $body  = '<h3 class="oilpriceapi-widget__title">Fuel Surcharge Calculator</h3>';
+        $body .= '<dl class="oilpriceapi-widget__calculation">';
+        $body .= '<div><dt>Weekly diesel average</dt><dd>$' . esc_html( number_format( $diesel, 3, '.', '' ) ) . '/gal</dd></div>';
+        $body .= '<div><dt>Configured base price</dt><dd>$' . esc_html( number_format( $base_price, 2, '.', '' ) ) . '/gal</dd></div>';
+        $body .= '<div class="oilpriceapi-widget__result"><dt>Percentage above base</dt><dd>' . esc_html( number_format( $surcharge, 1, '.', '' ) ) . '%</dd></div>';
+        $body .= '</dl>';
+        $body .= $this->render_source( $result );
 
-        return '<div id="' . esc_attr( $this->widgets['fuel-surcharge']['container_id'] ) . '"' . $data_attrs . '></div>';
+        return $this->render_shell( $body, $atts['theme'], 'fuel-surcharge' );
     }
 
     /**
-     * Render the Carbon Cost Calculator widget.
+     * Preserve old embeds without continuing the unsupported crude-price calculation.
      *
      * @param array $atts Shortcode attributes.
-     * @return string Widget HTML.
+     * @return string
      */
     public function render_carbon( $atts ) {
         $atts = shortcode_atts(
-            array(
-                'theme'        => oilpriceapi_widget_get_default( 'theme' ),
-                'carbon_price' => oilpriceapi_widget_get_default( 'carbon_price' ),
-            ),
+            array( 'theme' => oilpriceapi_widget_get_default( 'theme' ) ),
             $atts,
             'oilpriceapi_carbon'
         );
 
-        $this->enqueue_widget_script( 'carbon' );
+        $body  = '<h3 class="oilpriceapi-widget__title">Carbon Cost Calculator</h3>';
+        $body .= '<p class="oilpriceapi-widget__message">This legacy widget was retired because its crude-price input was not cleared for public redistribution.</p>';
+        $body .= '<p class="oilpriceapi-widget__action"><a href="https://www.oilpriceapi.com/docs/redistribution?utm_source=wordpress-plugin&amp;utm_medium=legacy-widget">Review data-use guidance</a></p>';
 
-        $data_attrs = sprintf(
-            ' data-theme="%s" data-carbon-price="%s"',
-            esc_attr( $atts['theme'] ),
-            esc_attr( $atts['carbon_price'] )
-        );
+        return $this->render_shell( $body, $atts['theme'], 'retired' );
+    }
 
-        return '<div id="' . esc_attr( $this->widgets['carbon']['container_id'] ) . '"' . $data_attrs . '></div>';
+    /** @return array */
+    private function selected_fuels( $raw ) {
+        $selected = array();
+        foreach ( explode( ',', strtolower( (string) $raw ) ) as $key ) {
+            $key = trim( $key );
+            if ( in_array( $key, array( 'diesel', 'gasoline' ), true ) && ! in_array( $key, $selected, true ) ) {
+                $selected[] = $key;
+            }
+        }
+        return empty( $selected ) ? array( 'diesel', 'gasoline' ) : $selected;
+    }
+
+    /** @return string */
+    private function render_source( $result ) {
+        $date = DateTimeImmutable::createFromFormat( '!Y-m-d', $result['payload']['week_of'] );
+        $html = '<div class="oilpriceapi-widget__source">';
+        $html .= '<span>Week of ' . esc_html( $date->format( 'F j, Y' ) ) . ' &middot; Updated weekly</span>';
+        if ( 'stale' === $result['state'] ) {
+            $html .= '<strong class="oilpriceapi-widget__stale">Cached copy; service temporarily unavailable</strong>';
+        }
+        $html .= '<span>Source: <a href="' . esc_url( OilPriceAPI_Widget_Data::SOURCE_URL ) . '" target="_blank" rel="noopener noreferrer">' . esc_html( OilPriceAPI_Widget_Data::SOURCE_LABEL ) . '</a> (public domain)</span>';
+        $html .= '<a href="https://www.oilpriceapi.com/from-widget?utm_source=wordpress-plugin&amp;utm_medium=widget">Delivered by OilPriceAPI</a>';
+        $html .= '</div>';
+        return $html;
+    }
+
+    /** @return string */
+    private function render_unavailable( $theme, $title ) {
+        $body  = '<h3 class="oilpriceapi-widget__title">' . esc_html( $title ) . '</h3>';
+        $body .= '<p class="oilpriceapi-widget__message">Fuel price data is temporarily unavailable.</p>';
+        $body .= '<p class="oilpriceapi-widget__action"><a href="https://status.oilpriceapi.com/" target="_blank" rel="noopener noreferrer">Check service status</a></p>';
+        return $this->render_shell( $body, $theme, 'unavailable' );
+    }
+
+    /** @return string */
+    private function render_shell( $body, $theme, $modifier ) {
+        wp_enqueue_style( 'oilpriceapi-widgets' );
+        $theme = 'light' === $theme ? 'light' : 'dark';
+        return '<section class="oilpriceapi-widget oilpriceapi-widget--' . esc_attr( $theme ) . ' oilpriceapi-widget--' . esc_attr( $modifier ) . '" aria-label="OilPriceAPI widget">' . $body . '</section>';
     }
 }

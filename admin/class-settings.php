@@ -78,9 +78,9 @@ class OilPriceAPI_Settings {
         );
 
         add_settings_field(
-            'commodities',
-            __( 'Default Commodities', 'oilpriceapi-widget' ),
-            array( $this, 'render_commodities_field' ),
+            'fuels',
+            __( 'Default Fuels', 'oilpriceapi-widget' ),
+            array( $this, 'render_fuels_field' ),
             'oilpriceapi-widget',
             'oilpriceapi_defaults_section'
         );
@@ -93,13 +93,6 @@ class OilPriceAPI_Settings {
             'oilpriceapi_defaults_section'
         );
 
-        add_settings_field(
-            'carbon_price',
-            __( 'Default Carbon Price', 'oilpriceapi-widget' ),
-            array( $this, 'render_carbon_price_field' ),
-            'oilpriceapi-widget',
-            'oilpriceapi_defaults_section'
-        );
     }
 
     /**
@@ -113,28 +106,20 @@ class OilPriceAPI_Settings {
 
         $sanitized['theme'] = isset( $input['theme'] ) && 'light' === $input['theme'] ? 'light' : 'dark';
 
-        if ( isset( $input['commodities'] ) ) {
-            $allowed = array( 'BRENT', 'WTI', 'NATGAS' );
-            $selected = array_intersect( (array) $input['commodities'], $allowed );
-            $sanitized['commodities'] = implode( ',', $selected );
+        if ( isset( $input['fuels'] ) ) {
+            $allowed = array( 'diesel', 'gasoline' );
+            $selected = array_intersect( (array) $input['fuels'], $allowed );
+            $sanitized['fuels'] = empty( $selected ) ? 'diesel,gasoline' : implode( ',', $selected );
         } else {
-            $sanitized['commodities'] = 'BRENT,WTI';
+            $sanitized['fuels'] = 'diesel,gasoline';
         }
 
         $sanitized['base_price'] = isset( $input['base_price'] )
             ? sanitize_text_field( $input['base_price'] )
             : '2.50';
 
-        if ( ! is_numeric( $sanitized['base_price'] ) || floatval( $sanitized['base_price'] ) < 0 ) {
+        if ( ! is_numeric( $sanitized['base_price'] ) || floatval( $sanitized['base_price'] ) <= 0 ) {
             $sanitized['base_price'] = '2.50';
-        }
-
-        $sanitized['carbon_price'] = isset( $input['carbon_price'] )
-            ? sanitize_text_field( $input['carbon_price'] )
-            : '50';
-
-        if ( ! is_numeric( $sanitized['carbon_price'] ) || floatval( $sanitized['carbon_price'] ) < 0 ) {
-            $sanitized['carbon_price'] = '50';
         }
 
         return $sanitized;
@@ -161,25 +146,24 @@ class OilPriceAPI_Settings {
     }
 
     /**
-     * Render the commodities checkbox field.
+     * Render the fuels checkbox field.
      */
-    public function render_commodities_field() {
-        $current = explode( ',', oilpriceapi_widget_get_default( 'commodities' ) );
+    public function render_fuels_field() {
+        $current = explode( ',', oilpriceapi_widget_get_default( 'fuels' ) );
         $options = array(
-            'BRENT'  => 'Brent Crude',
-            'WTI'    => 'WTI Crude',
-            'NATGAS' => 'Natural Gas',
+            'diesel'   => 'U.S. Diesel',
+            'gasoline' => 'U.S. Gasoline',
         );
 
         foreach ( $options as $val => $label ) {
             printf(
-                '<label style="margin-right: 16px;"><input type="checkbox" name="oilpriceapi_widget_settings[commodities][]" value="%s" %s /> %s</label>',
+                '<label style="margin-right: 16px;"><input type="checkbox" name="oilpriceapi_widget_settings[fuels][]" value="%s" %s /> %s</label>',
                 esc_attr( $val ),
                 checked( in_array( $val, $current, true ), true, false ),
                 esc_html( $label )
             );
         }
-        echo '<p class="description">' . esc_html__( 'Commodities shown in the Oil Price Ticker widget.', 'oilpriceapi-widget' ) . '</p>';
+        echo '<p class="description">' . esc_html__( 'Weekly EIA retail-fuel series shown in the Fuel Price Ticker.', 'oilpriceapi-widget' ) . '</p>';
     }
 
     /**
@@ -192,18 +176,6 @@ class OilPriceAPI_Settings {
             esc_attr( $value )
         );
         echo '<p class="description">' . esc_html__( 'Base fuel price for the Fuel Surcharge Calculator.', 'oilpriceapi-widget' ) . '</p>';
-    }
-
-    /**
-     * Render the carbon price field.
-     */
-    public function render_carbon_price_field() {
-        $value = oilpriceapi_widget_get_default( 'carbon_price' );
-        printf(
-            '<input type="text" name="oilpriceapi_widget_settings[carbon_price]" value="%s" class="small-text" /> <span>$/tonne CO₂</span>',
-            esc_attr( $value )
-        );
-        echo '<p class="description">' . esc_html__( 'Carbon price for the Carbon Cost Calculator.', 'oilpriceapi-widget' ) . '</p>';
     }
 
     /**
@@ -230,14 +202,14 @@ class OilPriceAPI_Settings {
             <h2><?php esc_html_e( 'Shortcode Reference', 'oilpriceapi-widget' ); ?></h2>
 
             <div class="oilpriceapi-shortcode-ref">
-                <h3><?php esc_html_e( 'Oil Price Ticker', 'oilpriceapi-widget' ); ?></h3>
-                <code id="shortcode-ticker">[oilpriceapi_ticker theme="dark" commodities="BRENT,WTI" layout="horizontal"]</code>
+                <h3><?php esc_html_e( 'Fuel Price Ticker', 'oilpriceapi-widget' ); ?></h3>
+                <code id="shortcode-ticker">[oilpriceapi_ticker theme="dark" fuels="diesel,gasoline" layout="horizontal"]</code>
                 <button type="button" class="button oilpriceapi-copy-btn" data-target="shortcode-ticker">
                     <?php esc_html_e( 'Copy', 'oilpriceapi-widget' ); ?>
                 </button>
 
-                <h3><?php esc_html_e( 'Diesel Price Tracker', 'oilpriceapi-widget' ); ?></h3>
-                <code id="shortcode-diesel">[oilpriceapi_diesel theme="dark" regional="true"]</code>
+                <h3><?php esc_html_e( 'U.S. Diesel Price', 'oilpriceapi-widget' ); ?></h3>
+                <code id="shortcode-diesel">[oilpriceapi_diesel theme="dark"]</code>
                 <button type="button" class="button oilpriceapi-copy-btn" data-target="shortcode-diesel">
                     <?php esc_html_e( 'Copy', 'oilpriceapi-widget' ); ?>
                 </button>
@@ -248,11 +220,6 @@ class OilPriceAPI_Settings {
                     <?php esc_html_e( 'Copy', 'oilpriceapi-widget' ); ?>
                 </button>
 
-                <h3><?php esc_html_e( 'Carbon Cost Calculator', 'oilpriceapi-widget' ); ?></h3>
-                <code id="shortcode-carbon">[oilpriceapi_carbon theme="dark" carbon_price="50"]</code>
-                <button type="button" class="button oilpriceapi-copy-btn" data-target="shortcode-carbon">
-                    <?php esc_html_e( 'Copy', 'oilpriceapi-widget' ); ?>
-                </button>
             </div>
 
             <hr />

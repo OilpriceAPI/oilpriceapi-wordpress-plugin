@@ -2,18 +2,17 @@
   "$schema": "https://schemas.wp.org/trunk/block.json",
   "apiVersion": 3,
   "name": "oilpriceapi/widget",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "title": "OilPriceAPI Widget",
   "category": "embed",
   "icon": "chart-line",
-  "description": "Embed live oil prices, diesel prices, fuel surcharge calculator, or carbon cost calculator.",
+  "description": "Embed source-dated weekly U.S. fuel prices or a fuel surcharge calculator.",
   "keywords": [
     "oil",
     "price",
-    "commodity",
     "diesel",
+    "gasoline",
     "fuel",
-    "carbon",
     "energy",
     "widget"
   ],
@@ -27,25 +26,17 @@
       "type": "string",
       "default": "dark"
     },
-    "commodities": {
+    "fuels": {
       "type": "string",
-      "default": "BRENT,WTI"
+      "default": "diesel,gasoline"
     },
     "layout": {
       "type": "string",
       "default": "horizontal"
     },
-    "regional": {
-      "type": "string",
-      "default": "true"
-    },
     "basePrice": {
       "type": "string",
       "default": "2.50"
-    },
-    "carbonPrice": {
-      "type": "string",
-      "default": "50"
     }
   },
   "supports": {

@@ -1,0 +1,8 @@
+{
+  "core": null,
+  "plugins": [
+    "./dist/oilpriceapi-widget",
+    "https://downloads.wordpress.org/plugin/plugin-check.latest-stable.zip"
+  ],
+  "testsEnvironment": false
+}

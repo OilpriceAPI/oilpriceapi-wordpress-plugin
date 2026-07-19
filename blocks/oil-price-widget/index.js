@@ -4,17 +4,15 @@
   var InspectorControls = wp.blockEditor.InspectorControls;
   var PanelBody = wp.components.PanelBody;
   var SelectControl = wp.components.SelectControl;
-  var ToggleControl = wp.components.ToggleControl;
   var TextControl = wp.components.TextControl;
   var Placeholder = wp.components.Placeholder;
   var useBlockProps = wp.blockEditor.useBlockProps;
   var __ = wp.i18n.__;
 
   var widgetLabels = {
-    ticker: __("Oil Price Ticker", "oilpriceapi-widget"),
-    diesel: __("Diesel Price Tracker", "oilpriceapi-widget"),
+    ticker: __("Fuel Price Ticker", "oilpriceapi-widget"),
+    diesel: __("U.S. Diesel Price", "oilpriceapi-widget"),
     "fuel-surcharge": __("Fuel Surcharge Calculator", "oilpriceapi-widget"),
-    carbon: __("Carbon Cost Calculator", "oilpriceapi-widget"),
   };
 
   registerBlockType("oilpriceapi/widget", {
@@ -40,20 +38,16 @@
             value: widgetType,
             options: [
               {
-                label: __("Oil Price Ticker", "oilpriceapi-widget"),
+                label: __("Fuel Price Ticker", "oilpriceapi-widget"),
                 value: "ticker",
               },
               {
-                label: __("Diesel Price Tracker", "oilpriceapi-widget"),
+                label: __("U.S. Diesel Price", "oilpriceapi-widget"),
                 value: "diesel",
               },
               {
                 label: __("Fuel Surcharge Calculator", "oilpriceapi-widget"),
                 value: "fuel-surcharge",
-              },
-              {
-                label: __("Carbon Cost Calculator", "oilpriceapi-widget"),
-                value: "carbon",
               },
             ],
             onChange: function (value) {
@@ -93,24 +87,14 @@
             }),
           widgetType === "ticker" &&
             el(TextControl, {
-              label: __("Commodities", "oilpriceapi-widget"),
+              label: __("Fuels", "oilpriceapi-widget"),
               help: __(
-                "Comma-separated: BRENT, WTI, NATGAS",
+                "Comma-separated: diesel, gasoline",
                 "oilpriceapi-widget",
               ),
-              value: attributes.commodities || "BRENT,WTI",
+              value: attributes.fuels || "diesel,gasoline",
               onChange: function (value) {
-                setAttributes({ commodities: value });
-              },
-            }),
-
-          // Diesel-specific options.
-          widgetType === "diesel" &&
-            el(ToggleControl, {
-              label: __("Show Regional Prices", "oilpriceapi-widget"),
-              checked: attributes.regional !== "false",
-              onChange: function (value) {
-                setAttributes({ regional: value ? "true" : "false" });
+                setAttributes({ fuels: value });
               },
             }),
 
@@ -124,18 +108,6 @@
               },
             }),
 
-          // Carbon-specific options.
-          widgetType === "carbon" &&
-            el(TextControl, {
-              label: __(
-                "Carbon Price ($/tonne CO\u2082)",
-                "oilpriceapi-widget",
-              ),
-              value: attributes.carbonPrice || "50",
-              onChange: function (value) {
-                setAttributes({ carbonPrice: value });
-              },
-            }),
         ),
       );
 
@@ -155,7 +127,7 @@
               widgetLabels[widgetType] ||
               __("OilPriceAPI Widget", "oilpriceapi-widget"),
             instructions: __(
-              "This widget will display live data on the frontend. Configure options in the sidebar.",
+              "The source date and weekly cadence appear with the data on the frontend.",
               "oilpriceapi-widget",
             ),
           },

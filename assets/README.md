@@ -1,25 +1,10 @@
-# WordPress.org Plugin Assets
+# WordPress.org Directory Assets
 
-Place the following files here before submission:
+The icon and banner PNGs in this directory are uploaded to the WordPress.org SVN `assets/` directory. They are not included in the installable plugin archive.
 
-## Required
+- `icon-128x128.png` and `icon-256x256.png`: OilPriceAPI barrel mark
+- `banner-772x250.png` and `banner-1544x500.png`: source-accurate weekly EIA fuel-widget message
 
-- `icon-128x128.png` — Plugin icon (128x128 pixels)
-- `icon-256x256.png` — Plugin icon retina (256x256 pixels)
+The editable banner source is `scripts/banner-source.svg`. Regenerate the retina PNG from that SVG in a browser at 1544 by 500 pixels, then resize it to 772 by 250 pixels for the standard banner.
 
-## Recommended
-
-- `banner-772x250.png` — Plugin banner for wordpress.org listing
-- `banner-1544x500.png` — Retina banner (optional)
-- `screenshot-1.png` — Oil Price Ticker (dark theme, horizontal)
-- `screenshot-2.png` — Diesel Price Tracker with regional prices
-- `screenshot-3.png` — Fuel Surcharge Calculator
-- `screenshot-4.png` — Carbon Cost Calculator
-- `screenshot-5.png` — Gutenberg block with sidebar controls
-- `screenshot-6.png` — Settings page with shortcode reference
-
-## Notes
-
-- Screenshots must match the numbering in readme.txt
-- Icons should have transparent or white backgrounds
-- Banner should showcase the widgets in action
+Only add numbered screenshot files when they were captured from the same plugin version named by `Stable tag` in `readme.txt`.
